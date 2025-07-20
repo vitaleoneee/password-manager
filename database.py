@@ -5,14 +5,14 @@ import sqlite3
 
 class Database:
     def __init__(self):
-        os.makedirs('database', exist_ok=True)
-        self.db = sqlite3.connect('database/passwords.db')
+        os.makedirs('db', exist_ok=True)
+        self.db = sqlite3.connect('db/passwords.db')
         self.cursor = self.db.cursor()
         self.init_db()
 
     def init_db(self):
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS passwords (id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT, password TEXT)")
+            "CREATE TABLE IF NOT EXISTS passwords (id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT UNIQUE, password TEXT)")
 
     def get_password(self, title):
         self.cursor.execute("SELECT title, password FROM passwords WHERE title = ?", (title,))

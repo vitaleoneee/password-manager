@@ -7,6 +7,6 @@ from ui_main import MainWindow
 if __name__ == '__main__':
     db = Database()
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = MainWindow(db)
     window.show()
     sys.exit(app.exec_())
