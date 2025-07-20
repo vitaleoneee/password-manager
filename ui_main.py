@@ -2,6 +2,7 @@ from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QLineEdit
 
 from styles import BUTTON_STYLE, INPUT_STYLE
+from utils import generate_password
 
 
 class MainWindow(QWidget):
@@ -27,6 +28,7 @@ class MainWindow(QWidget):
 
         self.button_generate = QPushButton("Generate a secure password")
         self.button_generate.setStyleSheet(BUTTON_STYLE)
+        self.button_generate.clicked.connect(lambda: generate_password(self.input_password))
 
         self.button_save = QPushButton("Save new password")
         self.button_save.setStyleSheet(BUTTON_STYLE)
