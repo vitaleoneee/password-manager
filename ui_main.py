@@ -1,8 +1,9 @@
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QLineEdit
 
-from handlers import handle_save_password
+from handlers import handle_save_password, open_password_list_window
 from styles import BUTTON_STYLE, INPUT_STYLE
+from ui_password_list import PasswordListWindow
 from utils import generate_password
 
 
@@ -16,6 +17,7 @@ class MainWindow(QWidget):
 
         self.button = QPushButton("List of passwords")
         self.button.setStyleSheet(BUTTON_STYLE)
+        self.button.clicked.connect(lambda: open_password_list_window(self))
 
         self.label_new_password = QLabel('Fill in the fields to save')
         self.label_new_password.setAlignment(Qt.AlignCenter)
