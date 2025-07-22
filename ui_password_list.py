@@ -23,7 +23,7 @@ class PasswordListWindow(QWidget):
 
         self.passwords_table = QTableWidget()
         self.passwords_table.setRowCount(len(self.passwords))
-        self.passwords_table.setColumnCount(2)
+        self.passwords_table.setColumnCount(3)
         self.passwords_table.setHorizontalHeaderLabels(['Title', 'Password', 'Clipboard'])
         self.passwords_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.passwords_table.resizeRowsToContents()
@@ -38,17 +38,18 @@ class PasswordListWindow(QWidget):
             item_password = QTableWidgetItem(str(db_object[1]))
             item_password.setBackground(QColor("#454444"))
             item_password.setFlags(Qt.NoItemFlags)
+            copy_button = QPushButton("Copy")
+            copy_button.setStyleSheet(BUTTON_STYLE)
+            copy_button.clicked.connect(
+                lambda _, row=i: copy_password(self, row, self.passwords_table))
             self.passwords_table.setItem(i, 0, item_title)
             self.passwords_table.setItem(i, 1, item_password)
+            self.passwords_table.setCellWidget(i, 2, copy_button)
 
         self.delete_button = QPushButton("Delete")
         self.delete_button.setStyleSheet(BUTTON_STYLE)
         self.delete_button.clicked.connect(
             lambda: delete_password(self, self.passwords_table, self.db, self.dispatcher))
-
-        self.copy_button = QPushButton("Copy password")
-        self.copy_button.clicked.connect(lambda: copy_password())
-        self.copy_button.setStyleSheet(BUTTON_STYLE)
 
         self.selected_objects_button = QPushButton("Change")
         self.selected_objects_button.setStyleSheet(BUTTON_STYLE)
@@ -61,7 +62,6 @@ class PasswordListWindow(QWidget):
         self.button_layout = QVBoxLayout()
         self.button_layout.addWidget(self.delete_button)
         self.button_layout.addWidget(self.selected_objects_button)
-        self.button_layout.addWidget(self.copy_button)
 
         self.table_layout = QHBoxLayout()
         self.table_layout.addWidget(self.passwords_table)

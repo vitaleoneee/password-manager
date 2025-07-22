@@ -1,7 +1,7 @@
 import sqlite3
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox, QApplication, QTableWidgetItem
 
 
 def handle_save_password(parent_window, db, title, password):
@@ -33,5 +33,5 @@ def change_password():
     print(2)
 
 
-def copy_password():
-    print(3)
+def copy_password(parent_window, row, table):
+    QApplication.clipboard().setText(table.item(row, 1).text())
