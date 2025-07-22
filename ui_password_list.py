@@ -43,7 +43,8 @@ class PasswordListWindow(QWidget):
 
         self.delete_button = QPushButton("Delete")
         self.delete_button.setStyleSheet(BUTTON_STYLE)
-        self.delete_button.clicked.connect(lambda: delete_password())
+        self.delete_button.clicked.connect(
+            lambda: delete_password(self, self.passwords_table, self.db, self.dispatcher))
 
         self.copy_button = QPushButton("Copy password")
         self.copy_button.clicked.connect(lambda: copy_password())
