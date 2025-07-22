@@ -1,5 +1,10 @@
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout
+from PySide6.QtGui import QIcon, QColor
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, QTableWidget, QHeaderView, \
+    QTableWidgetItem
+
+from handlers import delete_password, copy_password, change_password
+from styles import BUTTON_STYLE
 
 
 class PasswordListWindow(QWidget):
@@ -7,18 +12,65 @@ class PasswordListWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Password list")
         self.setWindowIcon(QIcon("media/icon.png"))
-        self.resize(500, 260)
+        self.resize(800, 400)
         self.db = db
         self.dispatcher = dispatcher
+        self.passwords = self.db.get_passwords()
 
-        self.test_button = QPushButton("Test")
-        self.sec_button = QPushButton("second")
+        self.search_input = QLineEdit()
+        self.search_button = QPushButton("Search")
+        self.search_button.setStyleSheet(BUTTON_STYLE)
 
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.test_button)
-        self.layout.addWidget(self.sec_button)
-        self.layout.addStretch()
-        self.setLayout(self.layout)
+        self.passwords_table = QTableWidget()
+        self.passwords_table.setRowCount(len(self.passwords))
+        self.passwords_table.setColumnCount(2)
+        self.passwords_table.setHorizontalHeaderLabels(['Title', 'Password', 'Clipboard'])
+        self.passwords_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.passwords_table.resizeRowsToContents()
+        self.passwords = self.db.get_passwords()
+        self.passwords_table.setRowCount(len(self.passwords))
+
+        for i, db_object in enumerate(self.passwords):
+            item_title = QTableWidgetItem(str(db_object[0]))
+            item_title.setBackground(QColor("#454444"))
+            item_title.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable)
+            item_title.setCheckState(Qt.Unchecked)
+            item_password = QTableWidgetItem(str(db_object[1]))
+            item_password.setBackground(QColor("#454444"))
+            item_password.setFlags(Qt.NoItemFlags)
+            self.passwords_table.setItem(i, 0, item_title)
+            self.passwords_table.setItem(i, 1, item_password)
+
+        self.delete_button = QPushButton("Delete")
+        self.delete_button.setStyleSheet(BUTTON_STYLE)
+        self.delete_button.clicked.connect(lambda: delete_password())
+
+        self.copy_button = QPushButton("Copy password")
+        self.copy_button.clicked.connect(lambda: copy_password())
+        self.copy_button.setStyleSheet(BUTTON_STYLE)
+
+        self.selected_objects_button = QPushButton("Change")
+        self.selected_objects_button.setStyleSheet(BUTTON_STYLE)
+        self.selected_objects_button.clicked.connect(lambda: change_password())
+
+        self.search_layout = QHBoxLayout()
+        self.search_layout.addWidget(self.search_input)
+        self.search_layout.addWidget(self.search_button)
+
+        self.button_layout = QVBoxLayout()
+        self.button_layout.addWidget(self.delete_button)
+        self.button_layout.addWidget(self.selected_objects_button)
+        self.button_layout.addWidget(self.copy_button)
+
+        self.table_layout = QHBoxLayout()
+        self.table_layout.addWidget(self.passwords_table)
+        self.table_layout.addLayout(self.button_layout)
+
+        self.main_layout = QVBoxLayout()
+        self.main_layout.addLayout(self.search_layout)
+        self.main_layout.addLayout(self.table_layout)
+
+        self.setLayout(self.main_layout)
 
     def closeEvent(self, event):
         self.dispatcher.show_main()
