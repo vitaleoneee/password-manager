@@ -1,7 +1,9 @@
 from PySide6.QtGui import QIcon, QColor
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, QTableWidget, QHeaderView, \
-    QTableWidgetItem
+from PySide6.QtWidgets import (
+    QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout,
+    QTableWidget, QHeaderView, QTableWidgetItem
+)
 
 from handlers import delete_password, copy_password, change_password
 from styles import BUTTON_STYLE
@@ -15,36 +17,16 @@ class PasswordListWindow(QWidget):
         self.resize(800, 400)
         self.db = db
         self.dispatcher = dispatcher
-        self.passwords = self.db.get_passwords()
 
         self.search_input = QLineEdit()
         self.search_button = QPushButton("Search")
         self.search_button.setStyleSheet(BUTTON_STYLE)
 
         self.passwords_table = QTableWidget()
-        self.passwords_table.setRowCount(len(self.passwords))
         self.passwords_table.setColumnCount(3)
         self.passwords_table.setHorizontalHeaderLabels(['Title', 'Password', 'Clipboard'])
         self.passwords_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.passwords_table.resizeRowsToContents()
-        self.passwords = self.db.get_passwords()
-        self.passwords_table.setRowCount(len(self.passwords))
-
-        for i, db_object in enumerate(self.passwords):
-            item_title = QTableWidgetItem(str(db_object[0]))
-            item_title.setBackground(QColor("#454444"))
-            item_title.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable)
-            item_title.setCheckState(Qt.Unchecked)
-            item_password = QTableWidgetItem(str(db_object[1]))
-            item_password.setBackground(QColor("#454444"))
-            item_password.setFlags(Qt.NoItemFlags)
-            copy_button = QPushButton("Copy")
-            copy_button.setStyleSheet(BUTTON_STYLE)
-            copy_button.clicked.connect(
-                lambda _, row=i: copy_password(self, row, self.passwords_table))
-            self.passwords_table.setItem(i, 0, item_title)
-            self.passwords_table.setItem(i, 1, item_password)
-            self.passwords_table.setCellWidget(i, 2, copy_button)
 
         self.delete_button = QPushButton("Delete")
         self.delete_button.setStyleSheet(BUTTON_STYLE)
@@ -53,7 +35,8 @@ class PasswordListWindow(QWidget):
 
         self.selected_objects_button = QPushButton("Change")
         self.selected_objects_button.setStyleSheet(BUTTON_STYLE)
-        self.selected_objects_button.clicked.connect(lambda: change_password())
+        self.selected_objects_button.clicked.connect(
+            lambda: change_password(self, self.passwords_table, self.db, self.dispatcher))
 
         self.search_layout = QHBoxLayout()
         self.search_layout.addWidget(self.search_input)
@@ -70,8 +53,34 @@ class PasswordListWindow(QWidget):
         self.main_layout = QVBoxLayout()
         self.main_layout.addLayout(self.search_layout)
         self.main_layout.addLayout(self.table_layout)
-
         self.setLayout(self.main_layout)
+
+        self.refresh_passwords_table()
+
+    def refresh_passwords_table(self):
+        self.passwords = self.db.get_passwords()
+        self.passwords_table.setRowCount(len(self.passwords))
+
+        for i, db_object in enumerate(self.passwords):
+            title, password = db_object
+
+            item_title = QTableWidgetItem(str(title))
+            item_title.setBackground(QColor("#454444"))
+            item_title.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable)
+            item_title.setCheckState(Qt.Unchecked)
+
+            item_password = QTableWidgetItem(str(password))
+            item_password.setBackground(QColor("#454444"))
+            item_password.setFlags(Qt.NoItemFlags)
+
+            copy_button = QPushButton("Copy")
+            copy_button.setStyleSheet(BUTTON_STYLE)
+            copy_button.clicked.connect(
+                lambda _, row=i: copy_password(row, self.passwords_table))
+
+            self.passwords_table.setItem(i, 0, item_title)
+            self.passwords_table.setItem(i, 1, item_password)
+            self.passwords_table.setCellWidget(i, 2, copy_button)
 
     def closeEvent(self, event):
         self.dispatcher.show_main()

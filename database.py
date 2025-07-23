@@ -30,7 +30,7 @@ class Database:
         self.cursor.execute("DELETE FROM passwords WHERE title = ?", (title,))
         self.db.commit()
 
-    def update_password(self, record_id, new_title, new_password):
-        self.cursor.execute("UPDATE passwords SET title = ?, password = ? WHERE id = ?",
-                            (new_title, new_password, record_id))
+    def update_password(self, old_title, new_title, new_password):
+        self.cursor.execute("UPDATE passwords SET title = ?, password = ? WHERE title = ?",
+                            (new_title, new_password, old_title))
         self.db.commit()
