@@ -1,7 +1,7 @@
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QLineEdit
 
-from handlers import handle_save_password
+from handlers import handle_main_save_password
 from styles import BUTTON_STYLE, INPUT_STYLE
 from utils import generate_password
 
@@ -37,7 +37,7 @@ class MainWindow(QWidget):
         self.button_save = QPushButton("Save new password")
         self.button_save.setStyleSheet(BUTTON_STYLE)
         self.button_save.clicked.connect(
-            lambda: handle_save_password(self, self.db, self.input_name.text(), self.input_password.text()))
+            lambda: handle_main_save_password(self, self.db, self.input_name.text(), self.input_password.text()))
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.button)

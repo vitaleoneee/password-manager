@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QTableWidget, QHeaderView, QTableWidgetItem
 )
 
-from handlers import delete_password, copy_password, change_password
+from handlers import handle_delete_password, handle_copy_password, handle_list_button_change_password
 from styles import BUTTON_STYLE
 
 
@@ -31,12 +31,12 @@ class PasswordListWindow(QWidget):
         self.delete_button = QPushButton("Delete")
         self.delete_button.setStyleSheet(BUTTON_STYLE)
         self.delete_button.clicked.connect(
-            lambda: delete_password(self, self.passwords_table, self.db, self.dispatcher))
+            lambda: handle_delete_password(self, self.passwords_table, self.db))
 
         self.selected_objects_button = QPushButton("Change")
         self.selected_objects_button.setStyleSheet(BUTTON_STYLE)
         self.selected_objects_button.clicked.connect(
-            lambda: change_password(self, self.passwords_table, self.db, self.dispatcher))
+            lambda: handle_list_button_change_password(self, self.passwords_table, self.dispatcher))
 
         self.search_layout = QHBoxLayout()
         self.search_layout.addWidget(self.search_input)
@@ -76,7 +76,7 @@ class PasswordListWindow(QWidget):
             copy_button = QPushButton("Copy")
             copy_button.setStyleSheet(BUTTON_STYLE)
             copy_button.clicked.connect(
-                lambda _, row=i: copy_password(row, self.passwords_table))
+                lambda _, row=i: handle_copy_password(row, self.passwords_table))
 
             self.passwords_table.setItem(i, 0, item_title)
             self.passwords_table.setItem(i, 1, item_password)

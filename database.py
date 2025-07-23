@@ -4,6 +4,8 @@ import sqlite3
 
 
 class Database:
+    """ Implementation of CRUD operations of sqlite database """
+
     def __init__(self):
         os.makedirs('db', exist_ok=True)
         self.db = sqlite3.connect('db/passwords.db')
@@ -13,10 +15,6 @@ class Database:
     def init_db(self):
         self.cursor.execute(
             "CREATE TABLE IF NOT EXISTS passwords (id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT UNIQUE, password TEXT)")
-
-    def get_password(self, title):
-        self.cursor.execute("SELECT title, password FROM passwords WHERE title = ?", (title,))
-        return self.cursor.fetchone()
 
     def get_passwords(self):
         self.cursor.execute("SELECT title, password FROM passwords")

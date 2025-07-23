@@ -1,5 +1,3 @@
-from PySide6.QtCore import Qt
-
 from ui_main import MainWindow
 from ui_password_detail import PasswordDetailWindow
 from ui_password_list import PasswordListWindow
