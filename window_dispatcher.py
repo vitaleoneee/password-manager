@@ -1,6 +1,6 @@
 from ui_main import MainWindow
 from ui_password_detail import PasswordDetailWindow
-from ui_password_list import PasswordListWindow
+from ui_passwords_list import PasswordListWindow
 
 
 class WindowDispatcher:

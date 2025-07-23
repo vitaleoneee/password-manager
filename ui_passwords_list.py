@@ -5,7 +5,8 @@ from PySide6.QtWidgets import (
     QTableWidget, QHeaderView, QTableWidgetItem
 )
 
-from handlers import handle_delete_password, handle_copy_password, handle_list_button_change_password
+from handlers import handle_delete_password, handle_copy_password, handle_list_button_change_password, \
+    handle_search_item
 from styles import BUTTON_STYLE
 
 
@@ -27,6 +28,9 @@ class PasswordListWindow(QWidget):
         self.passwords_table.setHorizontalHeaderLabels(['Title', 'Password', 'Clipboard'])
         self.passwords_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.passwords_table.resizeRowsToContents()
+
+        self.search_button.clicked.connect(
+            lambda: handle_search_item(self, self.search_input.text(), self.passwords_table))
 
         self.delete_button = QPushButton("Delete")
         self.delete_button.setStyleSheet(BUTTON_STYLE)

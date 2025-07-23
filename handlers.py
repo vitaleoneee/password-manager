@@ -1,7 +1,8 @@
 import sqlite3
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMessageBox, QApplication
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import QMessageBox, QApplication, QTableWidget
 
 
 def handle_main_save_password(parent_window, db, title, password):
@@ -62,3 +63,14 @@ def handle_list_button_change_password(parent_window, table, dispatcher):
 
 def handle_copy_password(row, table):
     QApplication.clipboard().setText(table.item(row, 1).text())
+
+
+def handle_search_item(parent_window, field_text, table):
+    parent_window.refresh_passwords_table()
+    for i in range(0, table.rowCount()):
+        table_item = table.item(i, 0)
+        if table_item.text() == field_text:
+            table_item.setForeground(QColor("#ffeaa7"))
+            table.scrollToItem(table_item, QTableWidget.PositionAtTop)
+            return
+    QMessageBox.warning(parent_window, 'Error', f'The password with title "{field_text}" does not exist.')
