@@ -14,7 +14,7 @@ class PasswordListWindow(QWidget):
     def __init__(self, db, dispatcher):
         super().__init__()
         self.setWindowTitle("Password list")
-        self.setWindowIcon(QIcon("media/icon.png"))
+        self.setWindowIcon(QIcon("icons/icon.png"))
         self.resize(800, 400)
         self.db = db
         self.dispatcher = dispatcher

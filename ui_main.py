@@ -10,7 +10,7 @@ class MainWindow(QWidget):
     def __init__(self, db, dispatcher):
         super().__init__()
         self.setWindowTitle('Password Manager')
-        self.setWindowIcon(QIcon('media/icon.png'))
+        self.setWindowIcon(QIcon('icons/icon.png'))
         self.resize(500, 260)
         self.dispatcher = dispatcher
         self.db = db

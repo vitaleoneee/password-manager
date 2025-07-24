@@ -111,6 +111,7 @@ Thumbs.db
 logs/
 
 # Other configs
+db/
 *.sqlite3
 *.pkl
 *.db

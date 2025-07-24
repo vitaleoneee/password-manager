@@ -9,7 +9,7 @@ class PasswordDetailWindow(QWidget):
     def __init__(self, parent_window, db, dispatcher, change_title, change_password):
         super().__init__()
         self.setWindowTitle("Password Detail")
-        self.setWindowIcon(QIcon("media/icon.png"))
+        self.setWindowIcon(QIcon("icons/icon.png"))
         self.resize(400, 180)
         self.parent_window = parent_window
         self.db = db

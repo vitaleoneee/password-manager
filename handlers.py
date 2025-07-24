@@ -12,6 +12,8 @@ def handle_main_save_password(parent_window, db, title, password):
     try:
         db.create_password(title, password)
         QMessageBox.information(parent_window, 'Success', 'Password saved successfully!')
+        parent_window.input_name.clear()
+        parent_window.input_password.clear()
     except sqlite3.IntegrityError:
         QMessageBox.critical(parent_window, 'Error', 'The password with this title already exists!')
 
