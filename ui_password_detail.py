@@ -17,7 +17,7 @@ class PasswordDetailWindow(QWidget):
         self.change_title = change_title
         self.change_password = change_password
 
-        self.label_change_password = QLabel('Please change the data in the fields below')
+        self.label_change_password = QLabel('If you want to change your password, please fill in the fields below.')
         self.label_change_password.setAlignment(Qt.AlignCenter)
 
         self.change_input_name = QLineEdit()

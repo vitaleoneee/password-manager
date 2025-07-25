@@ -44,27 +44,34 @@ def handle_delete_password(parent_window, table, db):
     parent_window.refresh_passwords_table()
 
 
-def handle_list_button_change_password(parent_window, table, dispatcher):
+def handle_list_button_change_password(parent_window, table, dispatcher, passwords):
     counter = 0
-    change_title_item = None
-    change_password_item = None
-    for i in range(0, table.rowCount()):
-        if table.item(i, 0).checkState() == Qt.Checked:
+    selected_row = -1
+
+    for i in range(table.rowCount()):
+        item = table.item(i, 0)
+        if item and item.checkState() == Qt.Checked:
             counter += 1
             if counter >= 2:
                 QMessageBox.warning(parent_window, "Warning", "You have selected more than 1 password.")
                 return
-            else:
-                change_title_item = table.item(i, 0)
-                change_password_item = table.item(i, 1)
+            selected_row = i
+
     if counter == 0:
         QMessageBox.warning(parent_window, "Warning", "You have not chosen any passwords.")
         return
-    dispatcher.show_password_details(parent_window, change_title_item.text(), change_password_item.text())
+    title = table.item(selected_row, 0).text()
+    password = passwords[selected_row][1]
+
+    dispatcher.show_password_details(parent_window, title, password)
 
 
-def handle_copy_password(row, table):
-    QApplication.clipboard().setText(table.item(row, 1).text())
+def handle_password_details(parent_window, dispatcher, curr_title, curr_password):
+    dispatcher.show_password_details(parent_window, curr_title, curr_password)
+
+
+def handle_copy_password(row, password):
+    QApplication.clipboard().setText(password)
 
 
 def handle_search_item(parent_window, field_text, table):

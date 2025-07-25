@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
 )
 
 from handlers import handle_delete_password, handle_copy_password, handle_list_button_change_password, \
-    handle_search_item
+    handle_search_item, handle_password_details
 from styles import BUTTON_STYLE
 
 
@@ -40,7 +40,7 @@ class PasswordListWindow(QWidget):
         self.selected_objects_button = QPushButton("Change")
         self.selected_objects_button.setStyleSheet(BUTTON_STYLE)
         self.selected_objects_button.clicked.connect(
-            lambda: handle_list_button_change_password(self, self.passwords_table, self.dispatcher))
+            lambda: handle_list_button_change_password(self, self.passwords_table, self.dispatcher, self.passwords))
 
         self.search_layout = QHBoxLayout()
         self.search_layout.addWidget(self.search_input)
@@ -73,17 +73,18 @@ class PasswordListWindow(QWidget):
             item_title.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable)
             item_title.setCheckState(Qt.Unchecked)
 
-            item_password = QTableWidgetItem(str(password))
-            item_password.setBackground(QColor("#454444"))
-            item_password.setFlags(Qt.NoItemFlags)
+            password_button = QPushButton('Password detail')
+            password_button.setStyleSheet(BUTTON_STYLE)
+            password_button.clicked.connect(
+                lambda _, t=title, p=password: handle_password_details(self, self.dispatcher, str(t), str(p)))
 
             copy_button = QPushButton("Copy")
             copy_button.setStyleSheet(BUTTON_STYLE)
             copy_button.clicked.connect(
-                lambda _, row=i: handle_copy_password(row, self.passwords_table))
+                lambda _, row=i, p=password,: handle_copy_password(row, str(p)))
 
             self.passwords_table.setItem(i, 0, item_title)
-            self.passwords_table.setItem(i, 1, item_password)
+            self.passwords_table.setCellWidget(i, 1, password_button)
             self.passwords_table.setCellWidget(i, 2, copy_button)
 
     def closeEvent(self, event):
