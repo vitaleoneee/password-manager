@@ -42,7 +42,7 @@ using PySide6. It is designed for secure storage and management of passwords.
 
 ## 📸 Screenshots
 
-![Main window](screenshots/main-window.png)
+![Main window](screenshots/main_window.png)
 
 ![Success save password](screenshots/password_save.png)
 
