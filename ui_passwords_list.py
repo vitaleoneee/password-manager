@@ -1,4 +1,4 @@
-from PySide6.QtGui import QIcon, QColor
+from PySide6.QtGui import QIcon, QColor, QBrush
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout,
@@ -70,6 +70,7 @@ class PasswordListWindow(QWidget):
 
             item_title = QTableWidgetItem(str(title))
             item_title.setBackground(QColor("#454444"))
+            item_title.setForeground(QBrush(QColor("white")))
             item_title.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable)
             item_title.setCheckState(Qt.Unchecked)
 
